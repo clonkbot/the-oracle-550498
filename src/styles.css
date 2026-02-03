@@ -1,0 +1,425 @@
+:root {
+  --bg-deep: #0a0908;
+  --bg-surface: #141210;
+  --text-primary: #f5f0e8;
+  --text-muted: #8a847a;
+  --text-dim: #5a554d;
+  --accent-gold: #d4a853;
+  --accent-amber: #c9923e;
+  --accent-glow: rgba(212, 168, 83, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+.oracle-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212, 168, 83, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(201, 146, 62, 0.04) 0%, transparent 50%),
+    var(--bg-deep);
+}
+
+.grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.4;
+  z-index: 100;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.oracle-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  animation: fadeInDown 1s ease-out;
+}
+
+.oracle-symbol {
+  font-size: 2.5rem;
+  color: var(--accent-gold);
+  margin-bottom: 1rem;
+  animation: pulse 3s ease-in-out infinite;
+  text-shadow: 0 0 30px var(--accent-glow);
+}
+
+.oracle-title {
+  font-family: 'Cinzel Decorative', 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.oracle-subtitle {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+}
+
+/* Input Section */
+.input-section {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.scroll-container {
+  width: 100%;
+  position: relative;
+  padding: 1rem 0;
+}
+
+.scroll-decoration {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+  opacity: 0.4;
+}
+
+.scroll-top {
+  top: 0;
+}
+
+.scroll-bottom {
+  bottom: 0;
+}
+
+.question-input {
+  width: 100%;
+  background: rgba(20, 18, 16, 0.8);
+  border: 1px solid rgba(212, 168, 83, 0.2);
+  border-radius: 4px;
+  padding: 1.5rem 2rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  resize: none;
+  transition: all 0.3s ease;
+  line-height: 1.6;
+}
+
+.question-input::placeholder {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.question-input:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 30px rgba(212, 168, 83, 0.15), inset 0 0 20px rgba(212, 168, 83, 0.05);
+}
+
+.seek-button {
+  position: relative;
+  padding: 1rem 3rem;
+  font-family: 'Cinzel', 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--bg-deep);
+  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.seek-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(212, 168, 83, 0.3);
+}
+
+.seek-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.button-text {
+  position: relative;
+  z-index: 1;
+}
+
+.button-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease;
+}
+
+.seek-button:hover:not(:disabled) .button-glow {
+  width: 300px;
+  height: 300px;
+}
+
+/* Advice Section */
+.advice-section {
+  width: 100%;
+  max-width: 700px;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Contemplation Animation */
+.contemplation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.contemplation-orb {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.orb-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid var(--accent-gold);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.orb-ring-1 {
+  width: 100px;
+  height: 100px;
+  opacity: 0.3;
+  animation: orbRotate 3s linear infinite;
+}
+
+.orb-ring-2 {
+  width: 70px;
+  height: 70px;
+  opacity: 0.5;
+  animation: orbRotate 2s linear infinite reverse;
+}
+
+.orb-ring-3 {
+  width: 40px;
+  height: 40px;
+  opacity: 0.7;
+  animation: orbRotate 1.5s linear infinite;
+}
+
+.orb-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  background: var(--accent-gold);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 20px var(--accent-gold), 0 0 40px var(--accent-glow);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.contemplation-text {
+  font-style: italic;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  animation: fadeInOut 2s ease-in-out infinite;
+}
+
+/* Wisdom Reveal */
+.wisdom-reveal {
+  text-align: center;
+  animation: wisdomAppear 1s ease-out;
+}
+
+.wisdom-decoration {
+  font-size: 1.5rem;
+  color: var(--accent-gold);
+  opacity: 0.6;
+  margin: 1rem 0;
+}
+
+.wisdom-text {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text-primary);
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.ask-again-button {
+  margin-top: 3rem;
+  padding: 0.75rem 2rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid rgba(212, 168, 83, 0.3);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ask-again-button:hover {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 20px rgba(212, 168, 83, 0.2);
+}
+
+/* Footer */
+.oracle-footer {
+  text-align: center;
+  padding: 1.5rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.oracle-footer p {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  opacity: 0.6;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes orbRotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes wisdomAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .oracle-header {
+    margin-bottom: 3rem;
+  }
+
+  .oracle-title {
+    letter-spacing: 0.15em;
+  }
+
+  .content-wrapper {
+    padding: 1.5rem;
+  }
+
+  .question-input {
+    padding: 1.25rem 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .wisdom-text {
+    font-size: 1.3rem;
+  }
+}
